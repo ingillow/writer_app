@@ -1,12 +1,13 @@
 
 
-class BooksDraft{
+class BooksDraft {
   final int id;
   final String header;
   final String body;
   final String cover;
 
-  BooksDraft({required this.header, required this.body, required this.cover, required this.id});
+  BooksDraft(
+      {required this.header, required this.body, required this.cover, required this.id});
 
   Map<String, dynamic> toJson() {
     return {
@@ -21,8 +22,9 @@ class BooksDraft{
     return BooksDraft(
       id: json['id'],
       header: json['header'] as String,
-      body: json['body']as String,
-      cover: json['cover']as String,
+      body: json['body'] as String,
+      cover: json['cover'] as String,
     );
   }
 
+}

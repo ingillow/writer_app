@@ -10,7 +10,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:writer_app/controller/books_draft_controller.dart';
 
-import 'package:writer_app/main.dart';
 import 'package:writer_app/models/books_draft.dart';
 
 class MockSharedPreferences extends Mock implements SharedPreferences {}
@@ -52,10 +51,10 @@ void main() {
             header: 'Existing Draft',
             body: 'Existing Content',
             cover: 'Existing Cover',
-            id: 1, // ID of an existing draft
+            id: 1,
           );
           when(() => mockSharedPreferences.getStringList('book_drafts'))
-              .thenReturn([existingDraft.toJsonString()]);
+              .thenReturn([existingDraft.toJson().toString()]);
 
           await controller.initSharedPref();
           expect(controller.drafts.length, 1);
