@@ -13,16 +13,24 @@ class BooksDraftController extends ChangeNotifier{
   TextEditingController get editingController => _editingControllerBody;
   TextEditingController get editingControllerHeader => _editingControllerHeader;
 
+  /// not the good design, should replace it
+  static int _bookId = 0;
+
+  int get bookId => _bookId;
+
+  set preferences(SharedPreferences? value) {
+    _preferences = value;
+  }
 
   List<BooksDraft> _drafts = [
-    BooksDraft(header: 'New book', body: "Vey long text with your masterpiece", cover: "Some cover", id: 1)
+    BooksDraft(header: 'New book', body: "Vey long text with your masterpiece", cover: "Some cover", id: _bookId++)
   ];
 
   List<BooksDraft> get drafts => _drafts;
 
 
   Future<void> initSharedPref() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = _preferences ?? await SharedPreferences.getInstance();
     List<String> draftsJson = prefs.getStringList('book_drafts') ?? [];
     _drafts = draftsJson.map((json) => BooksDraft.fromJson(jsonDecode(json))).toList();
     notifyListeners();
@@ -60,10 +68,15 @@ class BooksDraftController extends ChangeNotifier{
       header: _editingControllerHeader.text,
       body: _editingControllerBody.text,
       cover: 'Cover',
-      id: -1,
+      id: _bookId++,
     );
 
-    _drafts.add(draft);
+    int existingIndex = _drafts.indexWhere((d) => d.id == _bookId);
+    if (existingIndex != -1) {
+      _drafts[existingIndex] = draft;
+    } else {
+      _drafts.add(draft);
+    }
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> draftsJson = _drafts.map((draft) => jsonEncode(draft.toJson())).toList();
@@ -71,6 +84,4 @@ class BooksDraftController extends ChangeNotifier{
 
     notifyListeners();
   }
-
-
 }

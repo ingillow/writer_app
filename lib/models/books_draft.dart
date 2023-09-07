@@ -25,4 +25,4 @@ class BooksDraft{
       cover: json['cover']as String,
     );
   }
-}
+
